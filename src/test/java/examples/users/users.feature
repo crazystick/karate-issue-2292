@@ -2,45 +2,16 @@ Feature: sample karate test script
   for help, see: https://github.com/karatelabs/karate/wiki/IDE-Support
 
   Background:
-    * url 'https://jsonplaceholder.typicode.com'
+    * callonce read('classpath:examples/shared/shared.feature')
 
-  Scenario: get all users and then get the first user by id
-    Given path 'users'
-    When method get
-    Then status 200
+  Scenario: Scenario 1
+    * print 'Hello from Test 1 - Scenario 1'
+    * call read('@generic_print') { message: 'Test 1 - Scenario 1' }
 
-    * def first = response[0]
+  Scenario: Scenario 2
+    * print 'Hello from Test 1 - Scenario 2'
+    * call read('@generic_print') { message: 'Test 1 - Scenario 2' }
 
-    Given path 'users', first.id
-    When method get
-    Then status 200
-
-  Scenario: create a user and then get it by id
-    * def user =
-      """
-      {
-        "name": "Test User",
-        "username": "testuser",
-        "email": "test@user.com",
-        "address": {
-          "street": "Has No Name",
-          "suite": "Apt. 123",
-          "city": "Electri",
-          "zipcode": "54321-6789"
-        }
-      }
-      """
-
-    Given url 'https://jsonplaceholder.typicode.com/users'
-    And request user
-    When method post
-    Then status 201
-
-    * def id = response.id
-    * print 'created id is: ', id
-
-    Given path id
-    # When method get
-    # Then status 200
-    # And match response contains user
-  
+  @generic_print @ignore
+  Scenario: Generic Scenario
+    * print 'Hello from Generic Scenario - called by ' + message
